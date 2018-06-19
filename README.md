@@ -1,0 +1,2 @@
+# Blog
+Blog about life
