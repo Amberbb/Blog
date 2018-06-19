@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)https://blackrockdigital.github.io/startbootstrap-scrolling-nav/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Penguins Abound</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./style/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./style/scrolling-nav.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/wavesurfer.min.js"></script>
+
+    <script>
+
+        $(document).ready(function(){
+            var default_h = 384;
+            var default_w = 512;
+
+            function initWaveSurfer(name, domEl, url) {
+              window[name] = WaveSurfer.create({
+                container: domEl,
+                waveColor: 'blue',
+                progressColor: 'green'
+              });
+              window[name].load(url);
+            }
+
+            var sound_srcs = $('*[data-src*=sound-of-pixels]:visible');
+            for (var i = 0, len = sound_srcs.length; i < len; i++){
+                var e = sound_srcs[i];
+                container_name = '#' + e.getAttribute("id");
+                url = e.getAttribute("data-src");
+                if (container_name.includes('input')) {
+                    index = container_name.split('input')[1];
+                    wavesurfer_name = 'soundtrack' + index;
+                } else {
+                    index = container_name.split('demo')[1];
+                    wavesurfer_name = 'wavesurfer' + index;
+                }
+                initWaveSurfer(wavesurfer_name, container_name, url )
+            }
+
+
+            $("video").click(function (e) {
+                var video_name = $(this).attr('class').split(' ')[0];
+                var video = $("video." + video_name)[0];
+                if (video_name.includes("input")) {
+                    playOriginal(video_name, video)
+                } else {
+                    playDemo(video_name, video, e)
+                }
+            });
+
+            function playOriginal(video_name, video) {
+              wave_surfer_name = 'soundtrack' + video_name.split('Video')[1];
+              wavesurfer = window[wave_surfer_name];
+              video.muted = true;
+              video.currentTime = 0;
+              video.play();
+              wavesurfer.play([0]);
+            }
+
+            function playDemo(video_name, video, e) {
+              index = video_name.split('Video')[1];
+              wave_surfer_name = 'wavesurfer' + index;
+              wavesurfer = window[wave_surfer_name];
+              var scale = 16;
+              var offset = $(video).offset();
+              var xPos = e.pageX - offset.left;
+              var yPos = e.pageY - offset.top;
+              var x = Math.floor(xPos/video.clientWidth*default_w/scale)+1;
+              var y = Math.floor(yPos/video.clientHeight*default_h/scale)+1;
+              var x = Math.min(Math.max(x, 1), 32);
+              var y = Math.min(Math.max(y, 1), 24);
+              // console.log(x, y);
+              var sound_src = $(video)[0].src.slice(0, -4) + '/' + x + '_' + y + '.wav';
+              video.muted = true;
+              video.currentTime = 0;
+
+              // wavesurfer:
+              wavesurfer.empty();
+              wavesurfer.load(sound_src);
+              wavesurfer.on('ready', function () {
+                  video.play();
+                  wavesurfer.play();
+              });
+
+              // top is vertical direction, left is horizontal position
+              // offset chosen by inspection
+              var newtop = String((y-1) * video.clientHeight / default_h * scale + 40) +'px';
+              var newleft = String((x-1) * video.clientWidth / default_w * scale + 15) + 'px';
+              // console.log(newtop, newleft);
+              $(".overlay#dot" + index).css({"opacity": "0.5", "background": "red", "top": newtop, "left": newleft});
+            }
+
+        });
+
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-60734989-3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-60734989-3');
+    </script>
+
+    <style>
+      p.lead a {
+        color: #fff;
+      }
+      header.bg-primary {
+        /*margin-bottom: 0rem;*/
+        height: 0rem;
+      }
+
+      h1 {
+        font-size: 3.5rem;
+      }
+      h2 {
+        text-align: center;
+      }
+      video {
+        cursor: pointer;
+      }
+
+      .overlay {
+          height: 17.625px;
+          width: 22.727px;
+          position: absolute;
+          top: 45px;
+          left: 15px;
+          z-index: 2;
+          background: red;
+          opacity: 0;
+          border-radius: 80px
+        }
+    </style>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Amber</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#abstract">Abstract</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#video">Web Development</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#video">Coding and Games</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#video">Felting</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#video">Painting</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#demo">Jewelry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#demo">Photography</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#download">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-primary text-white">
+      <div class="container text-center" style="margin-top:-6rem;">
+        <h1>My Exploration and Hobbies</h1>
+        <p class="lead">
+          <a href="#">Amber Perreca</a>
+          <p>From Web Development to Gaming to Felting, from code to paint. <br>
+          Vancouver, British Columbia, Canada</p>
+
+      </div>
+    </header>
+
+    <section id="abstract" style="margin-top:-5rem;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 mx-auto">
+            <p class="lead">
+              My name is Amber Perreca. I love to combine my interests in coding with my love of art, education, and philosophy. 
+              My website is a platform for me to share what I am passionate about and my journey learning new things.
+              From coding to art, this will be a blog showcasing my projects. 
+            </p>
+
+            <!-- <ul>
+              <li>Clickable nav links that smooth scroll to page sections</li>
+              <li>Responsive behavior when clicking nav links perfect for a one page website</li>
+              <li>Bootstrap's scrollspy feature which highlights which section of the page you're on in the navbar</li>
+              <li>Minimal custom CSS so you are free to explore your own unique design options</li>
+            </ul> -->
+            <img src="images/penguin1.jpg" width="100%">
+
+             <p class="lead">
+         	  Computer coding - Learning web development, html5, css, and javascript. Felting - using loose wool to create cute and wonderful figures. 
+            
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="video" class="bg-light">
+      <div class="container" style="margin-top:-5rem;margin-bottom:-5rem;">
+        <div class="row">
+          <div class="col-lg-12 mx-auto text-center">
+
+            <!-- <h2>Video</h2> <video class='mainVideo' src="./demo_v3_small.mp4" controls="controls" width="100%">
+              your browser does not support the video tag
+            </video> -->
+            <!-- <iframe src="https://www.youtube.com/embed/LjPEAn6ehwo"></iframe> -->
+            <iframe width="560" height="315" src="https://www.youtube.com/watch?v=fbFYdzatOMg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo" style="margin-bottom:-5rem;width:100%;">
+      <div class="container" style="margin-top:-5rem;width:100%;">
+        <div class="row">
+          <div class="col-lg-12 mx-auto">
+            <h2>Visual Recognition</h2>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <p class="lead"> In this video you are able to see a penguin population</p>
+
+            <!-- Demo 1 -->
+            <div class="col-lg-6 mx-auto" >
+              <p>Penguin Dataset Videos:</p>
+              <!-- <div style="height:300px;"> -->
+              <div>
+                <video class='inputVideo1' src="#" width="100%" style="border-radius: 15px;"></video>
+              </div>
+              <div id="waveform_input1" data-src="#" width="100%"></div>
+            </div>
+
+            <div class="col-lg-6 mx-auto">
+              <div class="overlay" id="dot1"></div>
+              <p>Penguins Recognition:</p>
+              <!-- <div style="height:300px;"> -->
+              <div >
+                <video class='demoVideo1' src="#" width="100%" style="border-radius: 15px;"></video>
+                <!-- <video class='demoVideo' src="./saxophone+guitar-lMQVRb2mz44.mp4" width="500px" style="border-radius: 15px; position: absolute; left: 100px;"></video>
+                <svg style="position: absolute;" xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200">
+                  <circle id="clickCircle" cx="20" cy="20" r="8" stroke="red" stroke-width="3" fill="none" />
+                </svg> -->
+              </div>
+              <div id="waveform_demo1" data-src="#" width="100%"></div><br><br>
+            </div>
+
+            <!-- Demo 2 -->
+            <div class="col-lg-6 mx-auto">
+              <p>Dataset Penguin videos 2:</p>
+              <!-- <div style="height:300px;"> -->
+              <div>
+                <video class='inputVideo2' src=".#" width="100%" style="border-radius: 15px;"></video>
+              </div>
+              <div id="waveform_input2" data-src="#" width="100%"></div>
+            </div>
+
+            <div class="col-lg-6 mx-auto">
+              <div class="overlay" id="dot2"></div>
+              <p>Click on a video and watch the algorithm learn to recognize penguins:</p>
+              <!-- <div style="height:300px;"> -->
+              <div >
+                <video class='demoVideo2' src=".#" width="100%" style="border-radius: 15px;"></video>
+                <!-- <video class='demoVideo' src="./saxophone+guitar-lMQVRb2mz44.mp4" width="500px" style="border-radius: 15px; position: absolute; left: 100px;"></video>
+                <svg style="position: absolute;" xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200">
+                  <circle id="clickCircle" cx="20" cy="20" r="8" stroke="red" stroke-width="3" fill="none" />
+                </svg> -->
+              </div>
+              <div id="waveform_demo2" data-src="#" width="100%"></div><br><br>
+            </div>
+
+            <!-- Demo 3 -->
+            <div class="col-lg-6 mx-auto">
+              <p>Data Images:</p>
+              <!-- <div style="height:300px;"> -->
+              <div>
+                <video class='inputVideo3' src=".#" width="100%" style="border-radius: 15px;"></video>
+              </div>
+              <div id="waveform_input3" data-src="#" width="100%"></div>
+            </div>
+
+            <div class="col-lg-6 mx-auto">
+              <div class="overlay" id="dot3"></div>
+              <p>Click on a video to learn about image recognition!</p>
+              <!-- <div style="height:300px;"> -->
+              <div >
+                <video class='demoVideo3' src=".#" width="100%" style="border-radius: 15px;"></video>
+                <!-- <video class='demoVideo' src="./saxophone+guitar-lMQVRb2mz44.mp4" width="500px" style="border-radius: 15px; position: absolute; left: 100px;"></video>
+                <svg style="position: absolute;" xmlns="http://www.w3.org/2000/svg" version="1.1" width="200" height="200">
+                  <circle id="clickCircle" cx="20" cy="20" r="8" stroke="red" stroke-width="3" fill="none" />
+                </svg> -->
+              </div>
+              <div id="waveform_demo3" data-src="#" width="100%"></div><br><br>
+            </div>
+
+            Video clips credit to original Youtube videos: 
+            <a href="https://www.youtube.com/watch?v=2-Ol7ZB0MmU">[1]</a>
+            <a href="https://www.youtube.com/watch?v=vT1JzLTH4G4">[2]</a>
+            <a href="https://www.youtube.com/watch?v=fbFYdzatOMg">[3]</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section id="download" class="bg-light">
+      <div class="container" style="margin-top:-5rem;margin-bottom:-5rem;">
+        <div class="row">
+          <div class="col-lg-4 mx-auto text-center">
+            <h2>Paper</h2>
+            <!-- <p class="lead">coming soon.</p> -->
+            <a href="#"><img src="paper.png" height=200 style="border:1px solid black;"></a>
+          </div>
+          <div class="col-lg-4 mx-auto text-center">
+            <h2>Dataset</h2>
+            <p class="lead">Penguin Data Set 1.<br>Coming soon.</p>
+          </div>
+          <div class="col-lg-4 mx-auto text-center">
+            <h2>Code</h2>
+            <img src="#" style="width:120px;">
+            <p class="lead">Coming soon.</p>
+          </div>
+
+          <div class="col-lg-12 mx-auto">
+          <br>
+          <pre class="hightlight" style="background-color:rgba(0,0,0, 0.1)">
+
+    @article{Issam the Penguin Hunter,
+      title={The Sound of Penguins: Penguin Image Recognition},
+      author={Penguin Authors},
+      journal={arXiv preprint arXiv:1804.03160},
+      year={2018}
+    }
+          </pre>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section id="related" style="margin-bottom:-5rem;">
+      <div class="container" style="margin-top:-5rem;">
+        <div class="row">
+          <div class="col-lg-12 mx-auto">
+            <h2>Related Work</h2>
+            <p class="lead">
+              Here is a list of concurrent research on image separation or localization.
+            </p>
+            <ul>
+              <li>Names of authors <a href="#">Penguin Paper Title</a></li>
+              <li>Authors <a href="PDF paper">Penguin Paper 2</a></li>
+              <li>Authors<a href="Penguin Paper 3">Penguin paper 3</a></li>
+              <li>Authors <a href="Penguin Paper 4">Penguin Paper 4</a></li>
+              <li>Authors <a href="Penguin Paper 5">Penguin Paper 5</a></li>
+              <li>Authors. <a href="Penguin Paper 6">Penguin Paper 6</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright © Amber Perreca 2018</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="./assets/jquery.min.js"></script>
+    <script src="./assets/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="./assets/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="./assets/scrolling-nav.js"></script>
+
+
+</body></html>
